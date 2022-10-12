@@ -1,10 +1,10 @@
 {
   "name": "micro-server",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env DEBUG=micro-server jest"
+    "test": "cross-env DEBUG=micro-server:* jest"
   },
   "author": "jason",
   "license": "MIT",
