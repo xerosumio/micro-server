@@ -1,4 +1,4 @@
-const list = ({ data: { from } }) => {
+const list = async ({ data: { from } }) => {
   return {
     from,
     data: [
