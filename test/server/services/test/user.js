@@ -1,4 +1,4 @@
-const microServer = require("../../../../lib");
+const microServer = require("../../../../");
 
 const hello = () => {
   return {
