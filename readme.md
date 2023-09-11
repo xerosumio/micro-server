@@ -106,19 +106,34 @@ module.export={login}
 ### Helper Functions
 #### To call them
 ```javascript
-const { utils } = microServer.helper;
+const { utils,datap,joi } = microServer.helper;
 ```
 ##### Functions in the utils object
 |function name|parameter|output type|description|
 |----|----|----|----|
 |guid|none|string|generate a series of guid randomly|
-|retry|timeOfRetry:number,function|any or null, depends on the function|retry the input function for the given time, default retry is 3|
-|sleep|ms:number|null|only let the server wait a while for the given time|
+|retry|timeOfRetry:`number`,function|any or null, depends on the function|retry the input function for the given time, default retry is 3|
+|sleep|ms:`number`|`null`|only let the server wait a while for the given time in milliseconds|
 |compose|fns:Array<Function>|depends on the last function|It warp the functions together and execute it in order. For example, you want to check the credential before executing the next process|
 |pipe|same as compose|same as compose|the alaise of compose|
-|generateKey|size:number,format:string|string|generate an encrypted key with the given byte size and format for encryption|
-|generateSecretHash|key:string|string|generate a hash with the key generated using the generateKey|
-|compareKeys|storedKey:string,suppliedKey:string|boolean|compare if both key are the same|
+|generateKey|size:`number`,format:`string`|`string`|generate an encrypted key with the given byte size and format for encryption|
+|generateSecretHash|key:`string`|`string`|generate a hash with the key generated using the generateKey|
+|compareKeys|storedKey:`string`,suppliedKey:`string`|`boolean`|compare if both key are the same|
 |logger.info|obj:Array<any>|null|output the given objects into the console with a timestamp in cyan color|
 |logger.debug|obj:Array<any>|null|output the given objects into the console with a timestamp in yellow color|
 |logger.error|obj:Array<any>|null|output the given objects into the console with a timestamp in red color|
+
+##### Functions in Datap
+1. MongoConnector
+|function name|parameters|output type|description|
+|----|----|----|----|
+|connect|url:`string`,dbName:`string`|`MongoDb`|connect to the db using the given dbName and url|
+|db|dbName:string|`MongoDb`|return the db with the given db name|
+|create|coll:`string`,doc:`string`|`{insertedId,acknowledged}`|create a document into the connected mongodb, it will return the `insertedId`, which is the `_id` in common mongodb document, while the `acknowledged` indicates whether this write result was acknowledged|
+|createmany|coll:`string`,doc:`string`|`{insertedIds}`|create multiple documents in the db, the insertedIds is an array of `_id` of the created documents|
+|readone|coll:`string`,query:`object`,sort:`object`|`object`|find one document with the given query, the sort can be optional, it will fetch the most recent data if none of the sort criteria is inserted|
+|readid2|coll:`string`,id:`string`|`object`|find the document with the given id|
+|read|coll:`string`,query:`string`,limit:`number`,skip:`number`,sort:`object`|`array<object>`|it retrieve the documents specified in query as an array. limit, skip and sort are optional.|
+|update|coll:`string`,doc:`object`|`{acknowledged,matchedCount,modifiedCount,upsertedCount,upsertedId}`|update one document with the given document. Before using it, turn the `_id` of the object into `id`|
+
+2. JSONConnector
