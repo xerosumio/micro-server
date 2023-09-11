@@ -19,6 +19,18 @@ cron.schedule('0 0 * * *', () => {
 });
 ```
 
+### How to start the server
+for the below examples, they will use the config.dev.js
+```bash
+# Unix system, the SERVER_ENV should match the files in the config folder
+SERVER_ENV=dev node server.js
+```
+```powershell
+# Window System
+set SERVER_ENV=dev
+node server.js
+```
+
 ### How to use datap?
 ```javascript
 const microServer = require('micro-server')
