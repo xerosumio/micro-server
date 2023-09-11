@@ -126,6 +126,8 @@ const { utils,datap,joi } = microServer.helper;
 ##### Functions in Datap
 1. MongoConnector
 
+For parameter `query` and `sort`, please refer to the [here](https://www.mongodb.com/docs/manual/tutorial/query-documents/)
+
 |function name|parameters|output type|description|
 |----|----|----|----|
 |connect|url:`string`,dbName:`string`|`MongoDb`|connect to the db using the given dbName and url|
