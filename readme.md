@@ -102,3 +102,23 @@ const login=({data})=>{
 
 module.export={login}
 ```
+
+### Helper Functions
+#### To call them
+```javascript
+const { utils } = microServer.helper;
+```
+##### Functions in the utils object
+|function name|parameter|output type|description|
+|----|----|----|----|
+|guid|none|string|generate a series of guid randomly|
+|retry|timeOfRetry:number,function|any or null, depends on the function|retry the input function for the given time, default retry is 3|
+|sleep|ms:number|null|only let the server wait a while for the given time|
+|compose|fns:Array<Function>|depends on the last function|It warp the functions together and execute it in order. For example, you want to check the credential before executing the next process|
+|pipe|same as compose|same as compose|the alaise of compose|
+|generateKey|size:number,format:string|string|generate an encrypted key with the given byte size and format for encryption|
+|generateSecretHash|key:string|string|generate a hash with the key generated using the generateKey|
+|compareKeys|storedKey:string,suppliedKey:string|boolean|compare if both key are the same|
+|logger.info|obj:Array<any>|null|output the given objects into the console with a timestamp in cyan color|
+|logger.debug|obj:Array<any>|null|output the given objects into the console with a timestamp in yellow color|
+|logger.error|obj:Array<any>|null|output the given objects into the console with a timestamp in red color|
