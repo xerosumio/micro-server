@@ -18,6 +18,7 @@ cron.schedule('0 0 * * *', () => {
     getMail().then(()=>console.log('data stored')).catch(err=>console.log(err));
 });
 ```
+**For the example usage, please refer to [this repo]()**
 
 ### How to start the server
 for the below examples, they will use the config.dev.js
@@ -140,3 +141,70 @@ For parameter `query` and `sort`, please refer to the [here](https://www.mongodb
 |update|coll:`string`,doc:`object`|`{acknowledged,matchedCount,modifiedCount,upsertedCount,upsertedId}`|update one document with the given document. Before using it, turn the `_id` of the object into `id`|
 
 2. JSONConnector
+
+## Interact with the Server through Client
+Given that your project structure is like this below
+
+\(we will use axios for convenience\)
+
+```javascript
+// react
+import default as axios from "axios";
+import {useState,useEffect} from "react";
+
+// e.g. server port is 3000
+const BASE_URL='http://localhost:3000'
+
+function List(){
+    const [data,setData]=useState([]);
+
+
+    // e.g. the server have a get function in the book.js under the services/res folder
+    // load data from start
+    useEffect(()=>{
+        axios({
+            method: 'post',
+            url: `${BASE_URL}/res/book/get`,
+            data: {
+                /* criteria for querying data, example books */
+                id:1,
+                title:'Brave New World',
+                author:'Aldous Huxley'
+            }
+        })
+            .then((res)=>setData(res.data.data))
+            .catch(err=>{console.log(err)});
+    },[]);
+
+    return (<>
+        {data.map(d=>(<li key={d.id}>{d.txt}</li>))}
+    </>);
+}
+
+export {List}
+
+//vue
+<tmeplate></template>
+<script setup>
+import {ref,onMounted}from 'vue';
+import axios from 'axios';
+
+const BASE_URL='http://localhost:3000'
+const data=ref([]);
+
+onMounted(()=>{
+    axios({
+            method: 'post',
+            url: `${BASE_URL}/res/book/get`,
+            data: {
+                /* criteria for querying data, example books */
+                id:1,
+                title:'Brave New World',
+                author:'Aldous Huxley'
+            }
+        })
+        .then(res=>{data.value=res.data.data})
+        .catch(err=>console.log(err))
+});
+</script>
+```
