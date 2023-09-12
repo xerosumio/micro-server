@@ -123,6 +123,10 @@ const { utils,datap,joi } = microServer.helper;
 |logger.info|obj:Array<any>|null|output the given objects into the console with a timestamp in cyan color|
 |logger.debug|obj:Array<any>|null|output the given objects into the console with a timestamp in yellow color|
 |logger.error|obj:Array<any>|null|output the given objects into the console with a timestamp in red color|
+|matchPasswordRule|ruleRegExp:`RegExp`,password:`string`,message:`string`,errorCode:`number`|none|a password checker that check password with the given regul expression rules. Only throws error when it is not match with the rule.message and errorCode are optional|
+|isEmail|string:`string`|boolean|check if the given string is an email|
+|randString|e:`number`|`string`|generate a random string with the given length `e`|
+|cryptoPwd|str:`string`,salt:`string`|`string`|return an encrypted string with the given string and salt|
 
 ##### Functions in Datap
 1. MongoConnector
@@ -138,9 +142,12 @@ For parameter `query` and `sort`, please refer to the [here](https://www.mongodb
 |readone|coll:`string`,query:`object`,sort:`object`|`object`|find one document with the given query, the sort can be optional, it will fetch the most recent data if none of the sort criteria is inserted|
 |readid2|coll:`string`,id:`string`|`object`|find the document with the given id|
 |read|coll:`string`,query:`string`,limit:`number`,skip:`number`,sort:`object`|`array<object>`|it retrieve the documents specified in query as an array. limit, skip and sort are optional.|
-|update|coll:`string`,doc:`object`|`{acknowledged,matchedCount,modifiedCount,upsertedCount,upsertedId}`|update one document with the given document. Before using it, turn the `_id` of the object into `id`|
+|update|coll:`string`,doc:`object`|`{acknowledged:boolean,matchedCount:number,modifiedCount:number,upsertedCount:number,upsertedId:string}`|update one document with the given document. Before using it, turn the `_id` of the object into `id`|
+|updatemany|coll:`string`,q:`object`,doc:`object`|`{acknowledged:boolean,matchedCount:number,modifiedCount:number,upsertedCount:number,upsertedId:string}`|update the documents fulfill the criteria of `q` with the given `doc`|
+|upsert|coll:`string`,doc:`object`|`{acknowledged:boolean,matchedCount:number,modifiedCount:number,upsertedCount:number,upsertedId:string}`|update the given document, if the document not exists, insert it|
+|delete2|coll:`string`,id:`string`|`{acknowledged:boolean,deletedCount:number}`|remove the document with the given id|
+|deletequery|coll:`string`,q:`object`|`{acknowledged:boolean,deletedCount:number}`|remove documents from the given collection `coll` with the given `q`|
 
-2. JSONConnector
 
 ## Interact with the Server through Client
 Given that your project structure is like this below
