@@ -148,6 +148,13 @@ For parameter `query` and `sort`, please refer to the [here](https://www.mongodb
 |delete2|coll:`string`,id:`string`|`{acknowledged:boolean,deletedCount:number}`|remove the document with the given id|
 |deletequery|coll:`string`,q:`object`|`{acknowledged:boolean,deletedCount:number}`|remove documents from the given collection `coll` with the given `q`|
 
+2. JSONConnector
+|function name|parameters|output type|description|
+|----|----|----|----|
+|connect|filePath|none|connect json db with the given file|
+|db|none|`object`|return the db object|
+|create|coll:`string`,doc:`object`|none|insert data `doc` into collection `coll`|
+
 
 ## Interact with the Server through Client
 Given that your project structure is like this below
