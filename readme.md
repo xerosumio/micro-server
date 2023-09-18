@@ -73,12 +73,15 @@ module.exports=()=>{
 
 **Common attribute for the config file**
 
-|attributes|description|
-|----|----|
-|port|port number|
-|db.mongo|default mongodb link|
-|bodyParser.jsonLimit|the json limitation of the body-parser middleware|
-|bodyParser.textLimit|the text limitation of the body-parser middleware|
+|attributes|type|description|
+|----|----|----|
+|port|`number`|port number|
+|db.mongo|`string`|default mongodb link|
+|bodyParser.jsonLimit|`string`|the json limitation of the body-parser middleware|
+|bodyParser.textLimit|`string`|the text limitation of the body-parser middleware|
+|static.enabled|`boolean`|indicate does it store/host the static assets|
+|static.dirName|`string`|indicates where to put the static assets, to find them in the web, use the format `<host>:<port>`, for example, your web is host under port number `3000`, you can find the static assets under `http://localhost:3000`|
+|upload.enabled|`boolean`|indicates is upload enabled|
 
 attributes other than the table are custom values, you can still use the custom values through out the program.
 
