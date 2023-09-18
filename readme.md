@@ -18,7 +18,7 @@ cron.schedule('0 0 * * *', () => {
     getMail().then(()=>console.log('data stored')).catch(err=>console.log(err));
 });
 ```
-**For the example usage, please refer to [this repo]()**
+**For the example usage, please refer to [this repo](https://github.com/xerosumio/micro-server-sample)**
 
 ### How to start the server
 for the below examples, they will use the config.dev.js
