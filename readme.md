@@ -131,6 +131,19 @@ const { utils,datap,joi } = microServer.helper;
 |randString|e:`number`|`string`|generate a random string with the given length `e`|
 |cryptoPwd|str:`string`,salt:`string`|`string`|return an encrypted string with the given string and salt|
 
+Also, this libraries included the lodash package, you can use it by referencing to the following:
+```js
+const {utils}=require('micro-server').helper;
+const object={
+    pw:'123jreanfdklvgnfdg',
+    username:'IamSlickBACK'
+}
+utils._.omit(object,['pw']);
+```
+The above example initialize the `utils` object in the micro-server package, and this `utils` object has included the `_` of lodash with it. And its `omit` functions has been called to remove the `pw` property in the object and does not have any side effect in the object.
+
+For further documentation to the library, please view the [documentation](https://lodash.com/docs/4.17.15)
+
 ##### Functions in Datap
 1. MongoConnector
 
