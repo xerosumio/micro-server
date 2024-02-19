@@ -130,6 +130,7 @@ const { utils,datap,joi } = microServer.helper;
 |isEmail|string:`string`|boolean|check if the given string is an email|
 |randString|e:`number`|`string`|generate a random string with the given length `e`|
 |cryptoPwd|str:`string`,salt:`string`|`string`|return an encrypted string with the given string and salt|
+|storeUploadedFile|readerStream:`ReadStream`,filePath:`string`|`Array<Promises<T>>`|It used to store the files uploaded from the client side to the destinated `filePath`. For the reason why it has to pass the reader stream to the function rather than passing the name itself, cause the source maybe from network, so it will be better if this is passed as stream.|
 
 Also, this libraries included the lodash package, you can use it by referencing to the following:
 ```js
@@ -143,6 +144,10 @@ utils._.omit(object,['pw']);
 The above example initialize the `utils` object in the micro-server package, and this `utils` object has included the `_` of lodash with it. And its `omit` functions has been called to remove the `pw` property in the object and does not have any side effect in the object.
 
 For further documentation to the library, please view the [documentation](https://lodash.com/docs/4.17.15)
+
+Apart from `lodash` you can also use `fs-extra` package for further file manipulation. For how to use it is just the same way as `lodash` above.
+
+For further documentation to the library, please view the [documentation](https://www.npmjs.com/package/fs-extra) of the package.
 
 ##### Functions in Datap
 1. MongoConnector
