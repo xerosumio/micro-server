@@ -3,7 +3,7 @@
 ### How to install?
 
 ```
-npm install git@gitlab.com:tuofaninfo/micro-server.git
+npm install git@github.com:xerosumio/micro-server.git
 ```
 
 ### Use in your project.
@@ -242,4 +242,69 @@ onMounted(()=>{
         .catch(err=>console.log(err))
 });
 </script>
+```
+### Handling Files
+This package also support files uploading. To do this, you should append the files to `files` key of the `FormData` class. After send it to the server, the server will process and pass the files under the `data.data._files` for request handler. And this have a function for converting the file stream back into its original form.
+```js
+// client
+// consider this is the file upload element
+document.getElementById("file-upload").addEventListener('change',e=>{
+    let formData=new FormData();
+    // in case it is multiple
+    for(var i=0;i<e.target.files.length;i++){
+        formData.append('files',e.target.files[i]);
+    }
+    axios({
+        url:"http://localhost:3000/res/file/upload",
+        method:"POST",
+        data:formData,
+    })
+    .then(console.log)
+    .catch(console.log);
+});
+// config in the server
+module.export=()=>{
+    return{
+        upload: {
+            // you must have this enabled before upload any files
+            enabled: true,
+            // this storage attributes is customizable, it just used for specifying where will the files truly stored
+            storage:'uploads',
+            multer:{
+                // the files in this dir is only in binaries,
+                // you cannot see its content after writing it
+                // back into its original file format
+                dest:'temp/'
+            },
+        },
+    }
+}
+// corresponding request path(services/res/file.js in this example) in the server
+const {utils}=require('micro-server').helper;
+const { cwd } = require('process');
+const {config}=require('micro-server').microConfig;
+const isLogEnabled=config.log===true;
+const fs=require('fs');
+const storage=`${cwd()}/${config.upload.storage}`;
+
+const upload=async({data})=>{
+    if(isLogEnabled){
+        utils.logger.debug('data: ',data._files);
+    }
+    utils.fsExtra.ensureDirSync(storage);
+    data._files.forEach(async(v)=>{
+        // open stream to read the file in temp storage
+        const reader=fs.createReadStream(`${cwd()}/${v.path}`);
+        await utils.storeUploadedFile(reader,`${storage}/${v.originalname}`);
+    });
+
+
+    return {
+        message:'upload successfully'
+    };
+};
+
+module.exports={
+    upload
+};
 ```
