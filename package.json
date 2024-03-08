@@ -21,6 +21,7 @@
     "koa-static": "^5.0.0",
     "lodash": "^4.17.21",
     "mongodb": "^4.10.0",
+    "mysql2": "^3.9.2",
     "simple-json-db": "^2.0.0",
     "socket.io": "^4.5.2"
   },
