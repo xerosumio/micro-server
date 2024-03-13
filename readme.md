@@ -60,7 +60,14 @@ module.exports=()=>{
             mongo: "mongodb+srv://user:xxxxxxxxxxxx@cluster0.lst9u.mongodb.net/db?retryWrites=true&w=majority",
             json: path.join(__dirname, "../db/db.json"),
             mailbox: "mongodb+srv://user:xxxxxxxxxx@mqtt.3ksw9dn.mongodb.net/db",
-            dashboard:"mongodb+srv://user:xxxxxxxxxxxxxx@mqtt.aqeicjn.mongodb.net/db?retryWrites=true&w=majority"
+            dashboard:"mongodb+srv://user:xxxxxxxxxxxxxx@mqtt.aqeicjn.mongodb.net/db?retryWrites=true&w=majority",
+            sql:{
+                host:"localhost",
+                port:3306,
+                user:"root",
+                password:"<PASSWORD>",
+                database:"micro_server"
+            }
         },
         port:8080,
         bodyParser:{
@@ -77,6 +84,7 @@ module.exports=()=>{
 |----|----|----|
 |port|`number`|port number|
 |db.mongo|`string`|default mongodb link|
+|db.sql|`object`|default config for mysql, now only support mysql and only one instance of it|
 |bodyParser.jsonLimit|`string`|the json limitation of the body-parser middleware|
 |bodyParser.textLimit|`string`|the text limitation of the body-parser middleware|
 |static.enabled|`boolean`|indicate does it store/host the static assets|
@@ -169,7 +177,17 @@ For parameter `query` and `sort`, please refer to the [here](https://www.mongodb
 |delete2|coll:`string`,id:`string`|`{acknowledged:boolean,deletedCount:number}`|remove the document with the given id|
 |deletequery|coll:`string`,q:`object`|`{acknowledged:boolean,deletedCount:number}`|remove documents from the given collection `coll` with the given `q`|
 
-2. JSONConnector
+2. SQLConnector
+|function name|parameters|output type|description|
+|----|----|----|----|
+|createone|table:`string`,object:`object`|`number`|insert `object` into the table `table`|
+|read|table:`string`,filter:`Nullable<object>`,limit:`Nullable<number>`|`array<object>`|read the data from the table `table` with the given filter, limit|
+|readone|table:`string`,filter:`Nullable<object>`|`object`|read the data from the table `table` with the given filter|
+|readid|table:`string`,id:`string`|`object`|read the data from the table `table` with the given id|
+|deleteid|table:`string`,id:`string`|`number`|delete the data from the table `table` with the given id|
+|updateid|table:`string`,id:`string`,object:`object`|`number`|update the data from the table `table` with the given id|
+
+3. JSONConnector
 |function name|parameters|output type|description|
 |----|----|----|----|
 |connect|filePath|none|connect json db with the given file|
