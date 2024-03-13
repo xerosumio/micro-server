@@ -178,10 +178,32 @@ For parameter `query` and `sort`, please refer to the [here](https://www.mongodb
 |deletequery|coll:`string`,q:`object`|`{acknowledged:boolean,deletedCount:number}`|remove documents from the given collection `coll` with the given `q`|
 
 2. SQLConnector
+**input object**
+This is to specified the objects in the `filter` parameters:
+```js
+// the following is the generic filter object
+// key stands for column name, value stands for the value of the column, while operator is for the comparison operator mainly
+// for string type value, the default operator is 'like', while for number type value, the default operator is '='
+// for date obnject, please convert them into iso string, it will convert automatically
+{
+    key:{
+        value:value,
+        operator:'='
+    },
+    ...
+}
+```
+for `order` parameter:
+```js
+// the following is the generic order object
+// value only acepts 'asc' and 'desc'
+{key:value}
+```
+
 |function name|parameters|output type|description|
 |----|----|----|----|
 |createone|table:`string`,object:`object`|`number`|insert `object` into the table `table`|
-|read|table:`string`,filter:`Nullable<object>`,limit:`Nullable<number>`|`array<object>`|read the data from the table `table` with the given filter, limit|
+|read|table:`string`,filter:`Nullable<object>`,limit:`Nullable<number>`,order:`Nullable<object>`|`array<object>`|read the data from the table `table` with the given filter, limit|
 |readone|table:`string`,filter:`Nullable<object>`|`object`|read the data from the table `table` with the given filter|
 |readid|table:`string`,id:`string`|`object`|read the data from the table `table` with the given id|
 |deleteid|table:`string`,id:`string`|`number`|delete the data from the table `table` with the given id|
