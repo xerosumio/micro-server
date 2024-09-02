@@ -3,13 +3,18 @@
 ### How to install?
 
 ```
-npm install git@github.com:xerosumio/micro-server.git
+npm install @xerosumio/micro-server
+```
+However, since this has became a private package, you will need `.npmrc` to access this package. This usually done by me, but just in case: you will need to create a personal access token with permission that able to read package at least, then the following is the `.npmrc`:
+```.npmrc
+//npm.pkg.github.com/:_authToken=PERSONAL_ACCESS_TOKEN
+@NAMESPACE:registry=https://npm.pkg.github.com
 ```
 
 ### Use in your project.
 ```javascript
-const microServer = require("micro-server");
-microServer.start({ projectDir: __dirname });
+const microServer = require("@xerosumio/micro-server");
+microServer.start({ projectDir: __dirname /* or cwd() of process package*/ });
 // any program e.g. watcher, cron job you wish to run
 //below is an example of a cron job
 const {getMail}=require('./services/sms/gmail');
@@ -34,7 +39,7 @@ node server.js
 
 ### How to use datap?
 ```javascript
-const microServer = require('micro-server')
+const microServer = require('@xerosumio/micro-server')
 const { datap, joi } = microServer.helper;
 
 // for operating with the default mongo link
@@ -48,7 +53,7 @@ const dashboard=new datap.MongoConnector(config.db.dashboard);
 ```
 ### How to load config within the project
 ```javascript
-const microServer=require('micro-server');
+const microServer=require('@xerosumio/micro-server');
 const { config } = microServer.microConfig;
 ```
 
@@ -142,7 +147,7 @@ const { utils,datap,joi } = microServer.helper;
 
 Also, this libraries included the lodash package, you can use it by referencing to the following:
 ```js
-const {utils}=require('micro-server').helper;
+const {utils}=require('@xerosumio/micro-server').helper;
 const object={
     pw:'123jreanfdklvgnfdg',
     username:'IamSlickBACK'
@@ -320,9 +325,9 @@ module.export=()=>{
     }
 }
 // corresponding request path(services/res/file.js in this example) in the server
-const {utils}=require('micro-server').helper;
+const {utils}=require('@xerosumio/micro-server').helper;
 const { cwd } = require('process');
-const {config}=require('micro-server').microConfig;
+const {config}=require('@xerosumio/micro-server').microConfig;
 const isLogEnabled=config.log===true;
 const fs=require('fs');
 const storage=`${cwd()}/${config.upload.storage}`;
