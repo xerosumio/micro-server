@@ -78,7 +78,35 @@ module.exports=()=>{
         bodyParser:{
             jsonLimit:'5gb',
             textLimit:'5gb'
-        }
+        },
+        sse:{
+            enabled:true,
+            filePath:'./sse',
+            config:{}
+        },
+        upload: {
+            enabled: true,
+            storage:'uploads',
+            multer:{
+                // the files in this dir is only in binaries,
+                // you cannot see its content after writing it
+                // back into its original file format
+                dest:'temp/'
+            },
+        },
+        static: {
+            enabled: true,
+            dirName: "/public",
+        },
+        sio: {
+            enabled: true,
+            filePath: "./socket.io",
+            ws: {
+                cors: {
+                    origin: "*",
+                },
+            },
+        },
     }
 }
 ```
@@ -95,6 +123,13 @@ module.exports=()=>{
 |static.enabled|`boolean`|indicate does it store/host the static assets|
 |static.dirName|`string`|indicates where to put the static assets, to find them in the web, use the format `<host>:<port>`, for example, your web is host under port number `3000`, you can find the static assets under `http://localhost:3000`|
 |upload.enabled|`boolean`|indicates is upload enabled|
+|upload.multer|`object`|configs for multer middleware|
+|sse.enabled|`boolean`|whether the server send events is enabled or not, default is `false`|
+|sse.filePath|`string`|where the files of the ssehandlers resides|
+|sse.config|`object`|config for the middleware `koa-sse-stream`, details please visit the [github](https://github.com/yklykl530/koa-sse)|
+|sio.enabled|`boolean`|indicates whether the socket.io is enabled, default to `true`|
+|sio.filePath|`string`|the file of the socket.io handlers placed|
+|sio.ws|`object`|custom configs to the socket.io|
 
 attributes other than the table are custom values, you can still use the custom values through out the program.
 
@@ -353,3 +388,58 @@ module.exports={
     upload
 };
 ```
+
+### Server Send Events
+It is a newly added features in 07/02/2025. It allows the framework to use server send events for more flexibility to server development.
+
+To use it, you have to ensure the sse has been enabled:
+```javascript
+module.exports = () => {
+    return {
+        /*...other configs*/
+        sse:{
+            enabled:true
+        },
+        /*...other configs */
+    };
+};
+```
+Then, in your designated file for the sseHandlers(`sse.js` at the project root by default), create functions like this:
+```javascript
+module.exports = {
+    events: async function ({sse}) {
+        setInterval(() => {
+            sse.send({
+                event:'events',
+                data: new Date().toLocaleTimeString(),
+            });
+        }, 1000);
+    },
+};
+```
+or like this:
+```javascript
+function events({sse}){
+    setInterval(() => {
+        sse.send({
+            event:'events',
+            data: new Date().toLocaleTimeString(),
+        });
+    }, 1000);
+}
+```
+then in your client side, call it like this:
+```javascript
+//the string parameters in the EventSource is depends on your event attribute defined in the example above
+const eventSource = new EventSource("/events");
+
+eventSource.onmessage = function (event) {
+  console.log("New message:", event.data);
+};
+
+eventSource.onerror = function (err) {
+  console.log("error hit: ", err);
+  console.log("SSE connection lost, retrying...");
+};
+```
+In Developer Console(call it out by pressing F12 in your Browser), go to the network tab, then find the events you are going to receive(`/events` in this example), then you can see the things coming from the server through the Event Stream
