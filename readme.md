@@ -1,7 +1,8 @@
 # Micro Server
 ## Usage
 ### How to install?
-
+There are 2 ways:
+#### More secure and stable
 ```
 npm install @xerosumio/micro-server
 ```
@@ -10,6 +11,16 @@ However, since this has became a private package, you will need `.npmrc` to acce
 //npm.pkg.github.com/:_authToken=PERSONAL_ACCESS_TOKEN
 @NAMESPACE:registry=https://npm.pkg.github.com
 ```
+#### Latest
+First, add the following in your project's `package.json`:
+```json
+{
+    "dependencies": {
+        "micro-server": "https://github.com/xerosumio/micro-server.git"
+    }
+}
+```
+Then type `npm i` in your terminal to install the package.
 
 ### Use in your project.
 ```javascript
@@ -443,3 +454,4 @@ eventSource.onerror = function (err) {
 };
 ```
 In Developer Console(call it out by pressing F12 in your Browser), go to the network tab, then find the events you are going to receive(`/events` in this example), then you can see the things coming from the server through the Event Stream
+![Screenshot 2025-02-07 113744](https://github.com/user-attachments/assets/8b27bcc4-3275-40dc-adea-2761b9412924)
