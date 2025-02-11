@@ -417,27 +417,16 @@ module.exports = () => {
 ```
 Then, in your designated file for the sseHandlers(`sse.js` at the project root by default), create functions like this:
 ```javascript
-module.exports = {
-    events: async function ({sse}) {
-        setInterval(() => {
-            sse.send({
-                event:'events',
-                data: new Date().toLocaleTimeString(),
-            });
-        }, 1000);
-    },
-};
-```
-or like this:
-```javascript
-function events({sse}){
+// because we will directly treat this as the middleware, the sse file should export only 1 function
+// the parameters must have sse included in order to send events
+module.exports =async function ({sse}) {
     setInterval(() => {
         sse.send({
             event:'events',
             data: new Date().toLocaleTimeString(),
         });
     }, 1000);
-}
+};
 ```
 then in your client side, call it like this:
 ```javascript
