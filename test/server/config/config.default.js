@@ -5,7 +5,7 @@ module.exports = () => ({
     enabled: true,
     dirName: 'public',
     opts: {
-      // apiPrefix: '/api', // default to '/api', can be set to ''
+      apiPrefix: '/api', // default to '/api', can be set to ''
       index: 'index.html',
     },
   },
