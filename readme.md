@@ -69,57 +69,60 @@ const { config } = microServer.microConfig;
 ```
 
 ## Format of the config
+
 ```javascript
-module.exports=()=>{
-    return {
-        db: {
-            mongo: "mongodb+srv://user:xxxxxxxxxxxx@cluster0.lst9u.mongodb.net/db?retryWrites=true&w=majority",
-            json: path.join(__dirname, "../db/db.json"),
-            mailbox: "mongodb+srv://user:xxxxxxxxxx@mqtt.3ksw9dn.mongodb.net/db",
-            dashboard:"mongodb+srv://user:xxxxxxxxxxxxxx@mqtt.aqeicjn.mongodb.net/db?retryWrites=true&w=majority",
-            sql:{
-                host:"localhost",
-                port:3306,
-                user:"root",
-                password:"<PASSWORD>",
-                database:"micro_server"
-            }
+module.exports = () => ({
+    db: {
+        mongo: "mongodb+srv://user:xxxxxxxxxxxx@cluster0.lst9u.mongodb.net/db?retryWrites=true&w=majority",
+        json: path.join(__dirname, "../db/db.json"),
+        mailbox: "mongodb+srv://user:xxxxxxxxxx@mqtt.3ksw9dn.mongodb.net/db",
+        dashboard: "mongodb+srv://user:xxxxxxxxxxxxxx@mqtt.aqeicjn.mongodb.net/db?retryWrites=true&w=majority",
+        sql: {
+            host: "localhost",
+            port: 3306,
+            user: "root",
+            password: "<PASSWORD>",
+            database: "micro_server"
+        }
+    },
+    port: 8080,
+    bodyParser: {
+        jsonLimit: '5gb',
+        textLimit: '5gb'
+    },
+    sse: {
+        enabled: true,
+        filePath: './sse',
+        opts: {
+            matchPath: '/events' // SSE endpoint path
         },
-        port:8080,
-        bodyParser:{
-            jsonLimit:'5gb',
-            textLimit:'5gb'
+        config: {}
+    },
+    upload: {
+        enabled: true,
+        storage: 'uploads',
+        multer: {
+            dest: 'temp/'
         },
-        sse:{
-            enabled:true,
-            filePath:'./sse',
-            config:{}
+    },
+    static: {
+        enabled: true,
+        dirName: "/public",
+        opts: {
+            apiPrefix: '/api', // Prefix for all API routes, default is ''
+            index: 'index.html',
         },
-        upload: {
-            enabled: true,
-            storage:'uploads',
-            multer:{
-                // the files in this dir is only in binaries,
-                // you cannot see its content after writing it
-                // back into its original file format
-                dest:'temp/'
+    },
+    sio: {
+        enabled: true,
+        filePath: "./socket.io",
+        ws: {
+            cors: {
+                origin: "*",
             },
         },
-        static: {
-            enabled: true,
-            dirName: "/public",
-        },
-        sio: {
-            enabled: true,
-            filePath: "./socket.io",
-            ws: {
-                cors: {
-                    origin: "*",
-                },
-            },
-        },
-    }
-}
+    },
+});
 ```
 
 **Common attribute for the config file**
@@ -133,16 +136,27 @@ module.exports=()=>{
 |bodyParser.textLimit|`string`|the text limitation of the body-parser middleware|
 |static.enabled|`boolean`|indicate does it store/host the static assets|
 |static.dirName|`string`|indicates where to put the static assets, to find them in the web, use the format `<host>:<port>`, for example, your web is host under port number `3000`, you can find the static assets under `http://localhost:3000`|
+|static.opts.apiPrefix|`string`|Prefix for all API routes. If not `''`, all API endpoints will be under this prefix (e.g. `/api`). Requests not starting with this prefix will serve `index.html` from the static folder (SPA fallback).|
+|static.opts.index|`string`|The file to serve as the SPA fallback (usually `index.html`).|
 |upload.enabled|`boolean`|indicates is upload enabled|
 |upload.multer|`object`|configs for multer middleware|
 |sse.enabled|`boolean`|whether the server send events is enabled or not, default is `false`|
 |sse.filePath|`string`|where the files of the ssehandlers resides|
+|sse.opts.matchPath|`string`|The path to match for SSE endpoints. Only requests to this path will be handled as SSE.|
 |sse.config|`object`|config for the middleware `koa-sse-stream`, details please visit the [github](https://github.com/yklykl530/koa-sse)|
 |sio.enabled|`boolean`|indicates whether the socket.io is enabled, default to `true`|
 |sio.filePath|`string`|the file of the socket.io handlers placed|
 |sio.ws|`object`|custom configs to the socket.io|
 
-attributes other than the table are custom values, you can still use the custom values through out the program.
+**attributes other than the table are custom values, you can still use the custom values through out the program.**
+### API, Static, and SSE Route Separation
+
+**API Prefix**: By setting `static.opts.apiPrefix`, all API endpoints will be available under this prefix (e.g. `/api`).
+
+**SPA Fallback**: Any GET request that does not start with the API prefix or the SSE path will serve the `index.html` file from the static folder. This is useful for single-page applications (SPA) with client-side routing.
+
+**SSE Path**: The `sse.opts.matchPath` configures the path for server-sent events. Only requests to this path will be handled as SSE, keeping SSE endpoints separate from API and static routes.
+
 
 ### Adding services
 Be sure your services are placing under the directory name `services`, under it should be have a folder and js files for hosting your functions.
